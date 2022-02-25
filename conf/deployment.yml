@@ -1,0 +1,21 @@
+
+default-cluster: &default-cluster
+  new_cluster: 
+    spark_version: "10.3.x-scala2.12"
+    aws_attributes:
+      instance_profile_arn: "arn:aws:iam::938110268838:instance-profile/CloudTrailTest"
+    num_workers: 1
+
+environments:
+  default:
+    jobs:
+      - name: "notebook_1"
+        <<: 
+          - *default-cluster
+        schedule:
+          quartz_cron_expression: "12 0 7 * * ?"
+          timezone_id: "America/Los_Angeles"
+        notebook_task:
+          notebook_path: !ENV "/Repos/production/cicd-demo/notebook_1"
+          base_parameters:
+            env: "prod"
