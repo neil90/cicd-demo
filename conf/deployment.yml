@@ -5,6 +5,7 @@ default-cluster: &default-cluster
     aws_attributes:
       instance_profile_arn: "arn:aws:iam::938110268838:instance-profile/CloudTrailTest"
     num_workers: 1
+    node_type_id: 'i3.xlarge'
 
 environments:
   default:
