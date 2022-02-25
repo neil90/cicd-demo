@@ -3,7 +3,7 @@ name: CI pipeline
 on:
   push:
     branches:
-      - 'main'
+      - 'master'
 
 jobs:
   ci-pipeline:
@@ -35,7 +35,7 @@ jobs:
 
       - name: Deploy Notebooks
         run: |
-          databricks repos update --path /Repos/production/cicd-demo --branch main
+          databricks repos update --path /Repos/production/cicd-demo --branch master
 
       - name: Deploy Jobs
         run: |
