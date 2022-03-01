@@ -37,8 +37,13 @@ jobs:
         run: |
           databricks repos update --path /Repos/production/cicd-demo --branch master
 
+      - name: Create .env file
+        run: |
+          python utils/yaml2env.py PROD
+
       - name: Deploy Jobs
         run: |
+          source .env
           dbx deploy --no-rebuild
 
 

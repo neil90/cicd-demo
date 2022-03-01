@@ -8,6 +8,7 @@ on:
         description: Select the environment
         options:
         - STAGING
+        - QA
 
 jobs:
   ci-pipeline:
@@ -19,10 +20,43 @@ jobs:
     env:
       DATABRICKS_HOST: ${{ secrets[format('DATABRICKS_HOST_{0}', github.event.inputs.environment)] }}
       DATABRICKS_TOKEN:  ${{ secrets[format('DATABRICKS_TOKEN_{0}', github.event.inputs.environment)] }}
+      env: 
 
     steps:
       - uses: actions/checkout@v1
 
-      - name: greet
-        run: | 
-          echo "environment is ${{ github.event.inputs.environment }}"
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7.5
+
+      - name: Install pip
+        run: |
+          python -m pip install --upgrade pip
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: Install dependencies and project in dev mode
+        run: |
+          pip install dbx
+          pip install databricks-cli
+
+      - name: Create Repo
+        run: |
+          databricks repos create --url https://github.com/neil90/cicd-demo --provider gitHub --path /Repos/${{ github.event.inputs.environment }}/cicd-demo-BRANCH-${{ steps.extract_branch.outputs.branch }} --branch ${{ steps.extract_branch.outputs.branch }}
+
+      - name: Deploy Notebooks
+        run: |
+          databricks repos update --path /Repos/${{ github.event.inputs.environment }}/cicd-demo-BRANCH-${{ steps.extract_branch.outputs.branch }} --branch ${{ steps.extract_branch.outputs.branch }}
+
+      - name: Create .env file
+        run: |
+          python utils/yaml2env.py ${{ github.event.inputs.environment }}
+
+      - name: Deploy Jobs
+        run: |
+          source .env
+          echo "No Job Deploy Yet"
