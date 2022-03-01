@@ -17,14 +17,17 @@ jobs:
       max-parallel: 4
 
     env:
-      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-      DATABRICKS_TOKEN:  ${{ secrets.DATABRICKS_TOKEN }}
+      DATABRICKS_HOST_NAME: DATABRICKS_HOST_${GITHUB_REF_SLUG^^}
+      DATABRICKS_TOKEN_NAME: DATABRICKS_TOKEN_${GITHUB_REF_SLUG^^}
 
     steps:
       - uses: actions/checkout@v1
 
+      - name: Set Databricks HOST and TOKEN
+        run: |
+          echo "DATABRICKS_HOST=${{ secrets[env.DATABRICKS_HOST_NAME] }}" >> $GITHUB_ENV
+          echo "DATABRICKS_TOKEN=${{ secrets[env.DATABRICKS_TOKEN_NAME] }}" >> $GITHUB_ENV
+
       - name: greet
         run: | 
           echo "environment is ${{ github.event.inputs.environment }}"
-          echo "boolean is ${{ github.event.inputs.boolean }}"
-          echo "choice is ${{ github.event.inputs.choice }}"
