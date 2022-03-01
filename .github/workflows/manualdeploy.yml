@@ -17,8 +17,8 @@ jobs:
       max-parallel: 4
 
     env:
-      DATABRICKS_HOST: ${{ secrets[format('DATABRICKS_HOST_{0}', github.event.inputs.environment^^)] }}
-      DATABRICKS_TOKEN:  ${{ secrets[format('DATABRICKS_TOKEN_{0}', github.event.inputs.environment^^)] }}
+      DATABRICKS_HOST: ${{ secrets[format('DATABRICKS_HOST_{0}', github.event.inputs.environment)] }}
+      DATABRICKS_TOKEN:  ${{ secrets[format('DATABRICKS_TOKEN_{0}', github.event.inputs.environment)] }}
 
     steps:
       - uses: actions/checkout@v1
