@@ -6,22 +6,22 @@ on:
       environment:
         type: environment
         description: Select the environment
-      boolean:
-        type: boolean
-        description: True or False
-      choice:
-        type: choice
-        description: Make a choice
         options:
-        - foo
-        - bar
-        - baz
+        - staging
+        
 jobs:
-  build:
+  ci-pipeline:
+
     runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN:  ${{ secrets.DATABRICKS_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
 
       - name: greet
         run: | 
