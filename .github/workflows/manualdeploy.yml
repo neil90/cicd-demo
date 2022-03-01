@@ -46,7 +46,7 @@ jobs:
 
       - name: Create Repo
         run: |
-          databricks repos create --url https://github.com/neil90/cicd-demo --provider gitHub --path /Repos/${{ github.event.inputs.environment }}/cicd-demo-BRANCH-${{ steps.extract_branch.outputs.branch }} --branch ${{ steps.extract_branch.outputs.branch }}
+          databricks repos create --url https://github.com/neil90/cicd-demo --provider gitHub --path /Repos/${{ github.event.inputs.environment }}/cicd-demo-BRANCH-${{ steps.extract_branch.outputs.branch }}
 
       - name: Deploy Notebooks
         run: |
